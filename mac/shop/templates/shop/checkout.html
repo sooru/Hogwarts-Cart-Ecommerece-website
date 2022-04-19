@@ -1,6 +1,9 @@
 {% extends 'shop/basic.html' %}
 {% block title%} Checkout - My Awesome Cart{% endblock %}
 {% block body %}
+{% block css %}
+
+{% endblock %}
 <div class="container">
     <div class="col my-4">
         <h2>Step 1 - My Awesome Cart Express Checkout - Review Your Cart Items</h2>
@@ -98,7 +101,7 @@ for(var item in cart){
 alert('Thanks for placing your order .You can track you order using order id : {{id}}.')
 localStorage.clear()
 <!--cart={}-->
-document.location="/shop"
+document.location="/shop/checkout"
 {% endif %}
 </script>
 

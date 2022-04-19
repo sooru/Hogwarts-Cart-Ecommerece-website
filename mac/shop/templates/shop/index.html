@@ -108,10 +108,17 @@ top:424px
         </div>
     {% endfor %}
 </div>
+
  {% endblock %}
 
 {% block js %}
 <script>
+$('.searchbtn').click(function(){
+  var val=$('.searching').val()
+  window.location.href='/search/'+val+'/'
+  console.log('/search/'+val)
+})
+
 if(localStorage.getItem('cart') == null){
 var cart = {};
 }
