@@ -6,9 +6,12 @@ from django.contrib.auth.models import User,auth
 import json
 from django.contrib import messages
 # Create your views here.
+user_login=0
 def index(request):
     # products=Product.objects.all()
-
+    global user_login
+    if(not user_login):
+        return HttpResponseRedirect('/')
     allprods=[]
     catprods=Product.objects.values('category','id')
     # print(catprods)
@@ -23,6 +26,7 @@ def index(request):
     return render(request,'shop/index.html',params)
 
 def login(request):
+    global user_login
     if(request.method=="POST"):
         username=request.POST['username']
         password=request.POST['password']
@@ -30,6 +34,7 @@ def login(request):
         user=auth.authenticate(username=username,password=password)
         if(user is not None):
             auth.login(request,user)
+            user_login=True
             return HttpResponseRedirect("/home")
         else:
             messages.info(request,'Invalid Credentials')
@@ -38,12 +43,20 @@ def login(request):
         return render(request,'shop/login.html')
 
 def logout(request):
+    global user_login
     auth.logout(request)
+    user_login=False
     return HttpResponseRedirect('/')
 def about(request):
+    global user_login
+    if(not user_login):
+        return HttpResponseRedirect('/')
     return render(request,'shop/about.html')
 
 def contact(request):
+    global user_login
+    if(not user_login):
+        return HttpResponseRedirect('/')
     if request.method=='POST':
         name=request.POST.get('name',"")
         email=request.POST.get('email',"")
@@ -54,6 +67,10 @@ def contact(request):
     return render(request,'shop/contact.html')
 
 def tracker(request):
+    global user_login
+    if(not user_login):
+        print("--------------------")
+        return HttpResponseRedirect('/')
     if request.method=='POST':
         orderId=request.POST.get('orderId',"")
         email=request.POST.get('email',"")
@@ -74,6 +91,9 @@ def tracker(request):
     return render(request,'shop/tracker.html')
 
 def search(request,ll=None):
+    global user_login
+    if(not user_login):
+        return HttpResponseRedirect('/')
     allprods=[]
     # catprods=Product.objects.values('category','id')
     # print(catprods)
@@ -96,11 +116,17 @@ def search(request,ll=None):
     return render(request,'shop/index.html',params)
 
 def productview(request,myid):
+    global user_login
+    if(not user_login):
+        return HttpResponseRedirect('/')
     product=Product.objects.filter(id=myid)
 
     return render(request,'shop/prouctview.html',{'product':product[0]})
 
 def checkout(request):
+    global user_login
+    if(not user_login):
+        return HttpResponseRedirect('/')
     if request.method=='POST':
         name=request.POST.get('name')
         email=request.POST.get('email')
